@@ -1,21 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: havyilma <havyilma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 16:43:01 by havyilma          #+#    #+#             */
-/*   Updated: 2023/08/28 22:07:15 by havyilma         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/*   Created: 2022/10/09 18:25:25 by havyilma          #+#    #+#             */
-/*   Updated: 2022/10/11 01:44:04 by havyilma         ###   ########.fr       */
+/*   Created: 2023/08/29 22:18:48 by havyilma          #+#    #+#             */
+/*   Updated: 2023/10/07 19:16:59 by havyilma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	ft_init(t_setting *set)
+{
+	set->map = malloc(sizeof(t_map));
+	set->mlx = malloc(sizeof(t_mlx));
+	set->rc = malloc(sizeof(t_rc));
+	set->map->map_p = NULL;
+	set->map->north_text = NULL;
+	set->map->south_text = NULL;
+	set->map->west_text = NULL;
+	set->map->east_text = NULL;
+	set->map->rgb_c = malloc(sizeof(int) * 3);
+	set->map->rgb_c[0] = -1;
+	set->map->rgb_c[1] = -1;
+	set->map->rgb_c[2] = -1;
+	set->map->rgb_f = malloc(sizeof(int) * 3);
+	set->map->rgb_f[0] = -1;
+	set->map->rgb_f[1] = -1;
+	set->map->rgb_f[2] = -1;
+	set->press_w = 0;
+	set->press_a = 0;
+	set->press_s = 0;
+	set->press_d = 0;
+	set->direct_right = 0;
+	set->direct_left = 0;
+	set->move_speed = 0.05;
+	set->rot_speed = 0.04;
+	set->map->rgb_control = 0;
+}
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -25,10 +49,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	i = 0;
 	if (!s)
 		return (NULL);
-//	if (start >= ft_strlen(s))
-//		return (ft_strdup(""));
-//	if (len > ft_strlen(s) - start)
-//		len = ft_strlen(s) - start;
 	a = malloc(sizeof(char) * (len + 1));
 	if (!a)
 		return (NULL);
@@ -39,7 +59,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		start++;
 		len--;
 	}
-	a[i] = 0;
+	a[i] = '\0';
 	return (a);
 }
 
@@ -70,4 +90,32 @@ int	ft_atoi(const char *str)
 			return (0);
 	}
 	return (result * sign);
+}
+
+char	*ft_strdup(char *s1)
+{
+	char	*temp;
+	int		length;
+	int		i;
+
+	i = 0;
+	length = ft_strlen(s1);
+	temp = malloc(sizeof(char) * (length + 1));
+	if (!temp)
+		return (NULL);
+	while (s1 && s1[i])
+	{
+		temp[i] = s1[i];
+		i++;
+	}
+	temp[i] = 0;
+	return (temp);
+}
+
+int	print_error(char *str, int t)
+{
+	if (t > 2)
+		close (t);
+	printf("Error\n%s\n", str);
+	return (1);
 }

@@ -1,23 +1,16 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: havyilma <havyilma@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/08/28 19:51:14 by havyilma          #+#    #+#              #
-#    Updated: 2023/08/28 22:06:51 by havyilma         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-CFLAGS = -Wall -Wextra -Werror -I./minilibx
-LFLAGS = -framework AppKit -framework OpenGL -L./minilibx -lmlx
-MLX = minilibx/mlx.a
-GNL = get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c
-GNLOBJS = $(GNL:.c=.o)
-SRCS = libft.c main.c check_map_1.c
+SRCS =	./check_map/check_map_main.c ./check_map/check_map_textures.c ./check_map/check_valid_map.c ./check_map/check_xpm.c ./check_map/check_map_utils.c ./check_map/double_map.c\
+		./mlx/mlx_keys.c ./mlx/mlx_start.c\
+		./ray_casting/ray_casting.c ./ray_casting/get_images.c ./ray_casting/turning_around.c \
+		utils.c utils_second.c cub3d.c 
+GNL = ./get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c
 OBJS = $(SRCS:.c=.o)
-NAME = cub3d
+GNLOBJS = $(GNL:.c=.o)
+MLX = minilibx/mlx.a
+NAME = cub3D
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -I./minilibx
+LFLAGS = -framework AppKit -framework OpenGL -L./minilibx -lmlx 
+RM = rm -rf
 
 all : $(MLX) $(NAME) $(OBJS)
 
@@ -25,15 +18,19 @@ $(MLX) :
 	make -C minilibx
 
 $(NAME) : $(OBJS) $(GNLOBJS)
-	gcc $(CFLAGS) $(OBJS) $(GNLOBJS) $(LFLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(GNLOBJS) $(LFLAGS) -o $(NAME)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
 clean:
-	rm -rf $(OBJS) $(NAME)
+	@$(RM) $(OBJS)
+	@$(RM) $(GNLOBJS)
 
-fclean:
-	rm -rf $(OBJS) $(NAME)
-	rm -rf ../get_next_line/*.o
-	make clean -C ./minilibx
+fclean: clean
+	@$(RM) $(NAME)
+	@$(RM) ./get_next_line/*.o
+	@$(RM) ./minilibx/*.o
 
 re : fclean all
 
